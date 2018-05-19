@@ -4,10 +4,12 @@ $closedColor: map-get($colors, danger);
 page-home {
     .next-sunday-date {
         text-align: center;
-        margin-top: 10%;
+        padding-top: 10px;
+    }
+    .icon-extra-margin {
+        margin-top: 30%;
     }
     .icon-wrap {
-        margin-top: 30%;
         text-align: center;
         ion-icon {
             font-size: 10em;
