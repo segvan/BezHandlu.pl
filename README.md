@@ -1,0 +1,1 @@
+# BezHandlu.pl
