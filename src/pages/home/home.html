@@ -8,5 +8,8 @@
 </ion-header>
 
 <ion-content padding>
-
+  <p class="icon-wrap" (click)='iconClicked($event)'>
+    <ion-icon name='cart' [ngClass]="nextSunday?.shopsOpened ? 'opened-icon' : 'closed-icon'"></ion-icon>
+  </p>
+  <p class="next-sunday-date">{{nextSunday.date | date}}</p>
 </ion-content>
