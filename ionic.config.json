@@ -1,0 +1,8 @@
+{
+  "name": "BezHandlu.pl",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
