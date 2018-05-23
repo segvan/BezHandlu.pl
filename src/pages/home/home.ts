@@ -13,12 +13,12 @@ export class HomePage implements OnInit {
 
   nextSunday = new Sunday();
   inPortraitMode: any;
-  connectionError: boolean;
-  loading: boolean;
+  connectionError = false;
+  loading = true;
 
   constructor(public navCtrl: NavController, private orientation: ScreenOrientation,
     public platform: Platform, private dataStore: DataStoreService) {
-    this.loading = true;
+
     this.nextSunday.date = this.getNextSundayDate(new Date());
 
     this.platform.ready().then(() => {
@@ -33,6 +33,7 @@ export class HomePage implements OnInit {
 
   refreshData() {
     this.loading = true;
+    this.connectionError = false;
     this.dataStore.getByDate(this.nextSunday.date)
       .pipe(finalize(() => this.loading = false))
       .subscribe(
