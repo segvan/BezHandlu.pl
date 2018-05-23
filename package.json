@@ -2,7 +2,7 @@
   "name": "BezHandlu.pl",
   "version": "0.0.1",
   "author": "Sergii Trotsenko",
-  "homepage": "",
+  "homepage": "https://bezhandlu.herokuapp.com/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
