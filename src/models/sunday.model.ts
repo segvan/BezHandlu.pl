@@ -1,4 +1,4 @@
 export class Sunday {
-    shopsOpened: boolean;
+    isOpen: boolean;
     date: Date;
 }

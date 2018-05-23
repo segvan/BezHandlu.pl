@@ -1,16 +1,16 @@
 @import "../../theme/variables";
 $openedColor: map-get($colors, secondary);
 $closedColor: map-get($colors, danger);
+$errorColor: map-get($colors, light);
 page-home {
-    .next-sunday-date {
-        text-align: center;
+    text-align: center;
+    .next-sunday-text {
         padding-top: 10px;
     }
-    .icon-extra-margin {
+    .content-extra-margin {
         margin-top: 30%;
     }
     .icon-wrap {
-        text-align: center;
         ion-icon {
             font-size: 10em;
             padding: 20px 30px 20px 30px;
@@ -23,5 +23,9 @@ page-home {
     }
     .closed-icon {
         color: $closedColor;
+    }
+    .error-icon {
+        font-size: 10em;
+        color: $errorColor;
     }
 }

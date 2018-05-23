@@ -7,11 +7,15 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <div class="main-wrapper">
-    <p class="icon-wrap" [ngClass]="{'icon-extra-margin':inPortraitMode}" (click)='iconClicked($event)'>
-      <ion-icon name='cart' [ngClass]="nextSunday?.shopsOpened ? 'opened-icon' : 'closed-icon'"></ion-icon>
-    </p>
-    <p class="next-sunday-date">{{nextSunday.date | date}}</p>
+<ion-content padding [ngClass]="{'content-extra-margin':inPortraitMode}">
+  <div *ngIf="!loading" class="main-wrapper">
+    <div *ngIf="!connectionError" class="icon-wrap">
+      <ion-icon name='cart' [ngClass]="nextSunday?.isOpen ? 'opened-icon' : 'closed-icon'"></ion-icon>
+      <p class="next-sunday-text">{{nextSunday.date | date}}</p>
+    </div>
+    <div *ngIf="connectionError">
+      <ion-icon name='alert' class="error-icon" (click)="refreshData($event)"></ion-icon>
+      <p class="next-sunday-text">Connection failed. Tap icon to try again.</p>
+    </div>
   </div>
 </ion-content>

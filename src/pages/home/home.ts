@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
 import { Sunday } from '../../models/sunday.model';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { DataStoreService } from '../../services/data-store.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'page-home',
@@ -11,9 +13,12 @@ export class HomePage implements OnInit {
 
   nextSunday = new Sunday();
   inPortraitMode: any;
+  connectionError: boolean;
+  loading: boolean;
 
   constructor(public navCtrl: NavController, private orientation: ScreenOrientation,
-    public platform: Platform) {
+    public platform: Platform, private dataStore: DataStoreService) {
+    this.loading = true;
     this.nextSunday.date = this.getNextSundayDate(new Date());
 
     this.platform.ready().then(() => {
@@ -23,11 +28,23 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.nextSunday.shopsOpened = true;
+    this.refreshData();
   }
 
-  iconClicked() {
-    this.nextSunday.shopsOpened = !this.nextSunday.shopsOpened;
+  refreshData() {
+    this.loading = true;
+    this.dataStore.getByDate(this.nextSunday.date)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe(
+        (data: Sunday) => {
+          if (data) {
+            this.nextSunday.isOpen = data.isOpen;
+          } else {
+            this.connectionError = true;
+          }
+        },
+        error => this.connectionError = true
+      );
   }
 
   private setOrientation() {
