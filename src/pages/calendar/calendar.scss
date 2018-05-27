@@ -1,5 +1,6 @@
 @import './../../theme/variables';
 page-calendar {
+    text-align: center;
     .calendar {
         padding: 4% 4% 0 4%;
         font-size: 1.35em;
@@ -13,7 +14,6 @@ page-calendar {
         max-width: 14.285714285714286%;
     }
     .col {
-        text-align: center;
         padding: 5px;
     }
     .last-month,
@@ -55,5 +55,21 @@ page-calendar {
             border-top: solid 1px map-get($colors, primary);
             border-bottom: solid 1px map-get($colors, primary);
         }
+    }
+    .error-icon {
+        padding-top: 10%;
+        color: map-get($colors, light);
+        font-size: 10em;
+    }
+    ion-spinner {
+        padding-top: 30%;
+    }
+    .openDate {
+        color: map-get($colors, secondary);
+        font-weight: bold;
+    }
+    .closedDate {
+        color: map-get($colors, danger);
+        font-weight: bold;
     }
 }

@@ -7,8 +7,8 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <div class="calendar">
+<ion-content padding>
+  <div class="calendar" *ngIf="!loading && !connectionError">
     <div class="calendar-header">
       <ion-row class="calendar-month">
         <ion-col col-3 (click)="goToLastMonth()">
@@ -28,14 +28,16 @@
         <ion-row class="calendar-date">
           <ion-col col-1 *ngFor="let lastDay of daysInLastMonth" class="last-month" (click)="goToLastMonth()">{{lastDay}}</ion-col>
           <ion-col col-1 *ngFor="let day of daysInThisMonth">
-            <span class="currentDate" *ngIf="currentDate === day; else otherDate">{{day}}</span>
-            <ng-template #otherDate class="otherDate">
-              {{day}}
-            </ng-template>
+            <span [ngClass]="getDayClasses(day)">{{day}}</span>
           </ion-col>
           <ion-col col-1 *ngFor="let nextDay of daysInNextMonth" class="next-month" (click)="goToNextMonth()">{{nextDay}}</ion-col>
         </ion-row>
       </ion-grid>
     </div>
   </div>
+  <div *ngIf="connectionError">
+    <ion-icon name='alert' class="error-icon" (click)="refreshData($event)"></ion-icon>
+    <p class="next-sunday-text">Connection failed. Tap icon to try again.</p>
+  </div>
+  <ion-spinner *ngIf="loading" color="primary" name="circles"></ion-spinner>
 </ion-content>

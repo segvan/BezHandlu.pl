@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Sunday } from '../../models/sunday.model';
+import { DataStoreService } from '../../services/data-store.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'page-calendar',
@@ -17,17 +18,41 @@ export class CalendarPage implements OnInit {
   currentMonth: string;
   currentYear: number;
   currentDate: number;
-  isSelected: boolean;
-  sundaysList: Sunday[];
+  sundaysList: any;
+  sundaysThisMonth: any;
+  connectionError = false;
+  loading = true;
 
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController, private dataStore: DataStoreService) { }
 
   ngOnInit() {
     this.date = new Date();
     this.monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
     this.weekDays = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb', 'Nd'];
+    this.loadSundays();
     this.getDaysOfMonth();
-    this.loadSundaysThisMonth();
+  }
+
+  private refreshData() {
+    this.loadSundays();
+  }
+
+  loadSundays() {
+    this.loading = true;
+    this.connectionError = false;
+    this.dataStore.getAll()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe(
+        (data) => {
+          if (data) {
+            this.sundaysList = data;
+            this.loadSundaysThisMonth();
+          } else {
+            this.connectionError = true;
+          }
+        },
+        error => this.connectionError = true
+      );
   }
 
   getDaysOfMonth() {
@@ -35,10 +60,12 @@ export class CalendarPage implements OnInit {
     this.daysInLastMonth = new Array();
     this.daysInNextMonth = new Array();
 
-    this.currentMonth = this.monthNames[this.date.getMonth()];
+    const now = new Date();
     this.currentYear = this.date.getFullYear();
-    if (this.date.getMonth() === new Date().getMonth()) {
-      this.currentDate = new Date().getDate();
+    this.currentMonth = this.monthNames[this.date.getMonth()];
+    if (this.date.getMonth() === now.getMonth()
+      && this.date.getFullYear() == now.getFullYear()) {
+      this.currentDate = now.getDate();
     } else {
       this.currentDate = -1;
     }
@@ -70,16 +97,44 @@ export class CalendarPage implements OnInit {
   }
 
   loadSundaysThisMonth() {
-    this.sundaysList = new Array();
+    if (this.sundaysList) {
+      const year = this.sundaysList[this.currentYear]
+      if (year && year.monthes) {
+        const month = year.monthes[this.date.getMonth() + 1];
+        this.sundaysThisMonth = month || { days: {} };
+      }
+    }
   }
 
   goToLastMonth() {
     this.date = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
     this.getDaysOfMonth();
+    this.loadSundaysThisMonth();
   }
 
   goToNextMonth() {
     this.date = new Date(this.date.getFullYear(), this.date.getMonth() + 2, 0);
     this.getDaysOfMonth();
+    this.loadSundaysThisMonth();
+  }
+
+  getDayClasses(day: number): string | string[] {
+    let result: any;
+    if (day === this.currentDate) {
+      result = 'currentDate';
+    } else {
+      result = 'otherDate';
+    }
+
+    if (this.sundaysThisMonth.days[day]) {
+      result = [result];
+      if (this.sundaysThisMonth.days[day].isOpen) {
+        result.push('openDate');
+      } else {
+        result.push('closedDate');
+      }
+    }
+
+    return result;
   }
 }

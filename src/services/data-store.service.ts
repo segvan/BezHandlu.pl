@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Sunday } from '../models/sunday.model';
 
 @Injectable()
 export class DataStoreService {
@@ -16,16 +15,20 @@ export class DataStoreService {
         const url =
             this._API_BASE_URL +
             `${this._API_SUNDAYS_ENDPOINT}/` +
-            `${date.getFullYear()}/` +
-            this.getFormatedDate(date) +
+            `${date.getFullYear()}/monthes/` +
+            `${date.getMonth() + 1}/days/` +
+            `${date.getDate()}` +
             this._API_SUFFIX;
 
-
-        return this.http.get<Sunday>(url);
+        return this.http.get(url);
     }
 
-    private getFormatedDate(date: Date): string {
-        const jsonDate = date.toJSON();
-        return jsonDate.split('T')[0];
+    getAll() {
+        const url =
+            this._API_BASE_URL +
+            `${this._API_SUNDAYS_ENDPOINT}` +
+            this._API_SUFFIX;
+
+        return this.http.get(url);
     }
 }

@@ -7,7 +7,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding [ngClass]="{'content-extra-margin':inPortraitMode}">
+<ion-content padding [ngClass]="{'content-extra-margin': inPortraitMode}">
   <div *ngIf="!loading" class="main-wrapper">
     <div *ngIf="!connectionError" class="icon-wrap">
       <ion-icon name='cart' [ngClass]="nextSunday?.isOpen ? 'opened-icon' : 'closed-icon'"></ion-icon>

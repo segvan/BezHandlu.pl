@@ -53,7 +53,8 @@ export class HomePage implements OnInit {
   }
 
   private getNextSundayDate(date: Date) {
-    const daysToSunday = 7 - date.getDay();
+    const currentDay = date.getDay() !== 0 ? date.getDay() : 7;
+    const daysToSunday = 7 - currentDay;
     if (daysToSunday > 0) {
       date.setDate(date.getDate() + daysToSunday);
     }
