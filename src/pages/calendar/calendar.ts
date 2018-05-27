@@ -97,6 +97,7 @@ export class CalendarPage implements OnInit {
   }
 
   loadSundaysThisMonth() {
+    this.sundaysThisMonth = { days: {} };
     if (this.sundaysList) {
       const year = this.sundaysList[this.currentYear]
       if (year && year.monthes) {
